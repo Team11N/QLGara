@@ -1,6 +1,4 @@
-﻿
-
-create database QLGara
+﻿create database QLGara
 USE QLGara
 
 create table TaiKhoan(

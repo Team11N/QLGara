@@ -27,6 +27,9 @@ namespace QuanLiGaraOto
             LoadPhutung();
             lockTxtGara();
             LoadCmbGara();
+
+            cmbShowGara.Enabled = false;
+            //this.cmbShowGara.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         #region Method
@@ -110,7 +113,7 @@ namespace QuanLiGaraOto
         /// </summary>
         public void LoadCmbGara()
         {
-            
+
             string query = "SELECT HangXe FROM dbo.THONGTINXE";
             SqlConnect connect = new SqlConnect();
             cmbShowGara.DataSource = connect.ExecuteQuery(query);
@@ -122,64 +125,24 @@ namespace QuanLiGaraOto
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        //public SqlDataReader searchXe(string name, string value)
-        //{
-        //    SqlDataReader dr = null;
-        //    string query;
-        //    if (name.Equals("ID xe"))
-        //    {
-        //        query = "select xe.ID_Xe, h.HangXe, xe.BienSoXe, xe.DoiXe, xe.SoKhung, xe.SoMay, xe.SoKM from THONGTINXE xe, HANGXE h where xe.ID_HangXe = h.ID_HangXe and xe.ID_Xe like '" + value + "%'";
-        //        dr = execCommand(query);
-        //    }
-        //    else if (name.Equals("Hãng xe"))
-        //    {
-        //        query = "select xe.ID_Xe, h.HangXe, xe.BienSoXe, xe.DoiXe, xe.SoKhung, xe.SoMay, xe.SoKM from THONGTINXE xe, HANGXE h where xe.ID_HangXe = h.ID_HangXe and h.HangXe like '" + value + "%'";
-        //        dr = execCommand(query);
-        //    }
-        //    else if (name.Equals("Biển số xe"))
-        //    {
-        //        query = "select xe.ID_Xe, h.HangXe, xe.BienSoXe, xe.DoiXe, xe.SoKhung, xe.SoMay, xe.SoKM from THONGTINXE xe, HANGXE h where xe.ID_HangXe = h.ID_HangXe and xe.BienSoXe like '" + value + "%'";
-        //        dr = execCommand(query);
-        //    }
-        //    else if (name.Equals("Đời xe"))
-        //    {
-        //        query = "select xe.ID_Xe, h.HangXe, xe.BienSoXe, xe.DoiXe, xe.SoKhung, xe.SoMay, xe.SoKM from THONGTINXE xe, HANGXE h where xe.ID_HangXe = h.ID_HangXe and xe.DoiXe like '" + value + "%'";
-        //        dr = execCommand(query);
-        //    }
-        //    else if (name.Equals("Số khung"))
-        //    {
-        //        query = "select xe.ID_Xe, h.HangXe, xe.BienSoXe, xe.DoiXe, xe.SoKhung, xe.SoMay, xe.SoKM from THONGTINXE xe, HANGXE h where xe.ID_HangXe = h.ID_HangXe and xe.SoKhung like '" + value + "%'";
-        //        dr = execCommand(query);
-        //    }
-        //    else if (name.Equals("Số máy"))
-        //    {
-        //        query = "select xe.ID_Xe, h.HangXe, xe.BienSoXe, xe.DoiXe, xe.SoKhung, xe.SoMay, xe.SoKM from THONGTINXE xe, HANGXE h where xe.ID_HangXe = h.ID_HangXe and xe.SoMay like '" + value + "%'";
-        //        dr = execCommand(query);
-        //    }
-        //    else
-        //    {
-        //        query = "select xe.ID_Xe, h.HangXe, xe.BienSoXe, xe.DoiXe, xe.SoKhung, xe.SoMay, xe.SoKM from THONGTINXE xe, HANGXE h where xe.ID_HangXe = h.ID_HangXe and xe.SoKM like '" + value + "%'";
-        //        dr = execCommand(query);
-        //    }
-        //    return dr;
-        //}
-        public void searchGara()
+        public void searchGara(string bsx, string hangXe)
         {
-            string sqlSEARCH = "select* from ThongTinXe where BienSoXe = @BienSoXe";
-            SqlConnect connection = new SqlConnect();
-            connection.OpenConnect();
-            SqlCommand cmd = new SqlCommand(sqlSEARCH, connection.Conn);
-            cmd.Parameters.AddWithValue("BienSoXe", txtBS.Text);
-            cmd.Parameters.AddWithValue("HangXe", txtHangXe.Text);
-            cmd.Parameters.AddWithValue("DoiXe", txtDX.Text);
-            cmd.Parameters.AddWithValue("SoKhung", txtSoKhung.Text);
-            cmd.Parameters.AddWithValue("SoMay", txtSoMay.Text);
-            cmd.Parameters.AddWithValue("SoKM", txtSoKM.Text);
-            cmd.ExecuteNonQuery();
-            SqlDataReader dr = cmd.ExecuteReader();
-            DataTable dt = new DataTable();
-            dt.Load(dr);
-            dgvGara.DataSource = dt;
+            string query;
+            SqlConnect connect = new SqlConnect();
+
+            if (bsx == "")
+            {
+                query = "select * from THONGTINXE where HangXe= '" + hangXe + "'";
+                dgvGara.DataSource = connect.ExecuteQuery(query);
+
+            }
+            else
+            {
+                query = "select * from THONGTINXE where HangXe = '" + hangXe + "' and BienSoXe like '" + bsx + "%'";
+                dgvGara.DataSource = connect.ExecuteQuery(query);
+
+            }
+
         }
 
         #endregion
@@ -338,9 +301,34 @@ namespace QuanLiGaraOto
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnSearchGara_Click(object sender, EventArgs e)
+        //private void btnSearchGara_Click(object sender, EventArgs e)
+        //{
+        //    string sqlSEARCH = "select* from ThongTinXe where BienSoXe = @BienSoXe";
+        //    SqlConnect connection = new SqlConnect();
+        //    connection.OpenConnect();
+        //    SqlCommand cmd = new SqlCommand(sqlSEARCH, connection.Conn);
+        //    cmd.Parameters.AddWithValue("BienSoXe", txtBS.Text);
+        //    cmd.Parameters.AddWithValue("HangXe", txtHangXe.Text);
+        //    cmd.Parameters.AddWithValue("DoiXe", txtDX.Text);
+        //    cmd.Parameters.AddWithValue("SoKhung", txtSoKhung.Text);
+        //    cmd.Parameters.AddWithValue("SoMay", txtSoMay.Text);
+        //    cmd.Parameters.AddWithValue("SoKM", txtSoKM.Text);
+        //    cmd.ExecuteNonQuery();
+        //    SqlDataReader dr = cmd.ExecuteReader();
+        //    DataTable dt = new DataTable();
+        //    dt.Load(dr);
+        //    dgvGara.DataSource = dt;
+        //}
+
+        /// <summary>
+        /// reload dgvGara in DB
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnReloadGara_Click(object sender, EventArgs e)
         {
-            searchGara();
+            LoadXe();
+            cmbShowGara.Enabled = false;
         }
         /// <summary>
         /// update info gara
@@ -388,6 +376,8 @@ namespace QuanLiGaraOto
         /// <param name="e"></param>
         private void btnInsertGara_Click(object sender, EventArgs e)
         {
+            resetTxtGara();
+            unlockTxtGara();
             try
             {
                 if (txtBS.Text == "" || txtHangXe.Text == "" || txtDX.Text == "" || txtSoKhung.Text == "" || txtSoMay.Text == "" || txtSoKM.Text == "")
@@ -396,8 +386,7 @@ namespace QuanLiGaraOto
                 }
                 else
                 {
-                    resetTxtGara();
-                    unlockTxtGara();
+                    
                     string sqlINSERT = "INSERT INTO dbo.THONGTINXE( BienSoXe , HangXe ,DoiXe ,SoKhung , SoMay , SoKM) VALUES  ( '"
                                     + txtBS.Text + "' ,N'" + txtHangXe.Text + "' ,N'" + txtDX.Text + "' ,N'" + txtSoKhung.Text + "' , N'"
                                     + txtSoMay.Text + "' , N'" + txtSoKM.Text + "'  )";
@@ -435,6 +424,12 @@ namespace QuanLiGaraOto
                 txtSoKM.Text = row.Cells[5].Value.ToString();
             }
 
+        }
+
+        private void txtSearchGara_TextChanged(object sender, EventArgs e)
+        {
+            cmbShowGara.Enabled = true;
+            searchGara(txtSearchGara.Text, cmbShowGara.Text);
         }
 
         #endregion

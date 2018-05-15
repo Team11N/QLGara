@@ -63,6 +63,21 @@ namespace QuanLiGaraOto.DAL
             return data;
         }
 
-
+        public SqlDataReader execCommand(string sql)
+        {
+            SqlDataReader dr = null;
+            try
+            {
+                this.OpenConnect();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.CommandType = CommandType.Text;
+                dr = cmd.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                new Exception("Error:" + ex.Message);
+            }
+            return dr;
+        }
     }
 }

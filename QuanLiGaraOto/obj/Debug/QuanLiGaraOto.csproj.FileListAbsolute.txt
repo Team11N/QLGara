@@ -20,3 +20,13 @@ C:\Users\SamSam\Desktop\QuanLiGaraOtoFinal\QuanLiGaraOto\QuanLiGaraOto\obj\Debug
 C:\Users\SamSam\Desktop\QuanLiGaraOtoFinal\QuanLiGaraOto\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.csproj.CoreCompileInputs.cache
 C:\Users\SamSam\Desktop\QuanLiGaraOtoFinal\QuanLiGaraOto\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.exe
 C:\Users\SamSam\Desktop\QuanLiGaraOtoFinal\QuanLiGaraOto\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.pdb
+E:\Code VS\QlGara\QuanLiGaraOto\bin\Debug\QuanLiGaraOto.exe.config
+E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.exe
+E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.pdb
+E:\Code VS\QlGara\QuanLiGaraOto\bin\Debug\QuanLiGaraOto.exe
+E:\Code VS\QlGara\QuanLiGaraOto\bin\Debug\QuanLiGaraOto.pdb
+E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.csprojResolveAssemblyReference.cache
+E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.Properties.Resources.resources
+E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.csproj.GenerateResource.Cache
+E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.frmLogin.resources
+E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.frmQLGara.resources

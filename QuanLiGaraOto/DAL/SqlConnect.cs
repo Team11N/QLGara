@@ -8,21 +8,61 @@ using System.Threading.Tasks;
 
 namespace QuanLiGaraOto.DAL
 {
-     public class SqlConnect
+    public class SqlConnect
     {
-     private string connectionSTR = "Data Source=.\\sqlexpress;Initial Catalog=QLGara;Integrated Security=True";
-     public DataTable ExecuteQuery (string query)
+        private string strConn = "Data Source=.\\sqlexpress;Initial Catalog=QLGara;Integrated Security=True";
+        SqlConnection conn = null;
+
+        public SqlConnection Conn
         {
-            SqlConnection connection = new SqlConnection(connectionSTR);
-            connection.Open();
-            SqlCommand command = new SqlCommand(query, connection);
+            get
+            {
+                return conn;
+            }
+
+            set
+            {
+                conn = value;
+            }
+        }
+
+        public SqlConnect()
+        {
+            conn = new SqlConnection(strConn);
+        }
+
+        public void OpenConnect()
+        {
+            if (conn == null)
+            {
+                conn = new SqlConnection(strConn);
+            }
+            if (conn.State == ConnectionState.Closed)
+            {
+                conn.Open();
+            }
+        }
+
+        public void CloseConnect()
+        {
+            if (conn.State ==  ConnectionState.Open)
+            {
+                conn.Close();
+            }
+        }
+
+        public DataTable ExecuteQuery(string query)
+        {
+            SqlConnection conn = new  SqlConnection(strConn);
+            conn.Open();
+            SqlCommand command = new SqlCommand(query, conn);
             DataTable data = new DataTable();
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             adapter.Fill(data);
-            connection.Close();
+            conn.Close();
             return data;
-        }  
-       
-       
+        }
+
+
     }
 }

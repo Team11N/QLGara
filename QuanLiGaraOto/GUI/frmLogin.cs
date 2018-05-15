@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace QuanLiGaraOto
 {
-    public partial class Form1 : Form
+    public partial class frmLogin : Form
     {
-        public Form1()
+        public frmLogin()
         {
             InitializeComponent();
             WaterMark();
@@ -33,7 +33,7 @@ namespace QuanLiGaraOto
                 SqlDataReader sqlData = command.ExecuteReader();
                 if(sqlData.Read() == true)
                 {
-                    fMain f = new fMain();
+                    frmQLGara f = new frmQLGara();
                     this.Hide();
                     f.ShowDialog();
                     this.Show();

@@ -58,6 +58,7 @@ namespace QuanLiGaraOto
             this.dtpkTo = new System.Windows.Forms.DateTimePicker();
             this.dgvThongKe = new System.Windows.Forms.DataGridView();
             this.tbGara = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
             this.txtSearchGara = new System.Windows.Forms.TextBox();
             this.cmbShowGara = new System.Windows.Forms.ComboBox();
             this.btnReloadGara = new System.Windows.Forms.Button();
@@ -114,7 +115,8 @@ namespace QuanLiGaraOto
             this.btnNhaphang = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.label12 = new System.Windows.Forms.Label();
+            this.btnSaveGara = new System.Windows.Forms.Button();
+            this.btnExitGara = new System.Windows.Forms.Button();
             this.tbPhuTung.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
             this.tbDoanhThu.SuspendLayout();
@@ -385,6 +387,15 @@ namespace QuanLiGaraOto
             this.tbGara.Text = "Gara";
             this.tbGara.UseVisualStyleBackColor = true;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(63, 14);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(185, 13);
+            this.label12.TabIndex = 12;
+            this.label12.Text = "Mời nhập vào biển số xe cần tìm kiếm";
+            // 
             // txtSearchGara
             // 
             this.txtSearchGara.Location = new System.Drawing.Point(254, 11);
@@ -403,6 +414,7 @@ namespace QuanLiGaraOto
             this.cmbShowGara.Name = "cmbShowGara";
             this.cmbShowGara.Size = new System.Drawing.Size(147, 21);
             this.cmbShowGara.TabIndex = 10;
+            this.cmbShowGara.SelectedIndexChanged += new System.EventHandler(this.cmbShowGara_SelectedIndexChanged);
             // 
             // btnReloadGara
             // 
@@ -416,6 +428,8 @@ namespace QuanLiGaraOto
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.btnSaveGara);
+            this.panel4.Controls.Add(this.btnExitGara);
             this.panel4.Controls.Add(this.txtSoMay);
             this.panel4.Controls.Add(this.txtSoKM);
             this.panel4.Controls.Add(this.btnDelGara);
@@ -918,14 +932,25 @@ namespace QuanLiGaraOto
             this.tabControl.Size = new System.Drawing.Size(980, 448);
             this.tabControl.TabIndex = 0;
             // 
-            // label12
+            // btnSaveGara
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(63, 14);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(185, 13);
-            this.label12.TabIndex = 12;
-            this.label12.Text = "Mời nhập vào biển số xe cần tìm kiếm";
+            this.btnSaveGara.Location = new System.Drawing.Point(143, 288);
+            this.btnSaveGara.Name = "btnSaveGara";
+            this.btnSaveGara.Size = new System.Drawing.Size(46, 22);
+            this.btnSaveGara.TabIndex = 32;
+            this.btnSaveGara.Text = "Save";
+            this.btnSaveGara.UseVisualStyleBackColor = true;
+            this.btnSaveGara.Click += new System.EventHandler(this.btnSaveGara_Click);
+            // 
+            // btnExitGara
+            // 
+            this.btnExitGara.Location = new System.Drawing.Point(62, 288);
+            this.btnExitGara.Name = "btnExitGara";
+            this.btnExitGara.Size = new System.Drawing.Size(44, 22);
+            this.btnExitGara.TabIndex = 31;
+            this.btnExitGara.Text = "Exit";
+            this.btnExitGara.UseVisualStyleBackColor = true;
+            this.btnExitGara.Click += new System.EventHandler(this.btnExitGara_Click);
             // 
             // frmQLGara
             // 
@@ -936,6 +961,7 @@ namespace QuanLiGaraOto
             this.Name = "frmQLGara";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Phần Mềm Quản Lý Gara Ôtô";
+            this.Load += new System.EventHandler(this.frmQLGara_Load);
             this.tbPhuTung.ResumeLayout(false);
             this.tbPhuTung.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).EndInit();
@@ -1051,5 +1077,7 @@ namespace QuanLiGaraOto
         private System.Windows.Forms.TextBox txtBirthDay;
         private System.Windows.Forms.TextBox txtSearchGara;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button btnSaveGara;
+        private System.Windows.Forms.Button btnExitGara;
     }
 }

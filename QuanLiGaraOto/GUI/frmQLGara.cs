@@ -15,21 +15,11 @@ namespace QuanLiGaraOto
 {
     public partial class frmQLGara : Form
     {
+        public bool check;// = false;
 
         public frmQLGara()
         {
             InitializeComponent();
-
-            LoadXe();
-            LoadCmbNhanVien();
-            AddXuong();
-            LoadNhanvien();
-            LoadPhutung();
-            lockTxtGara();
-            LoadCmbGara();
-
-            cmbShowGara.Enabled = false;
-            //this.cmbShowGara.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         #region Method
@@ -109,12 +99,64 @@ namespace QuanLiGaraOto
             txtSoKM.Text = "";
         }
         /// <summary>
+        /// check insert, update in tbGara
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckIn_Up()
+        {
+            if (txtBS.Text == "" || txtHangXe.Text == "" || txtDX.Text == "" || txtSoKhung.Text == "" || txtSoMay.Text == "" || txtSoKM.Text == "")
+            {
+                return false;
+            }
+            return true;
+        }
+        //check delete
+        public bool CheckDel()
+        {
+            if (txtBS.Text == "")
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void showEnableBtn(string name)
+        {
+            if (name.Equals("insert"))
+            {
+                btnDelGara.Enabled = false;
+                btnEditGara.Enabled = false;
+                btnSaveGara.Enabled = true;
+                btnExitGara.Enabled = true;
+            }
+            if (name.Equals("update"))
+            {
+                btnDelGara.Enabled = false;
+                btnInsertGara.Enabled = false;
+                btnSaveGara.Enabled = true;
+                btnExitGara.Enabled = true;
+            }
+        }
+
+        public void resetEnableBtn(string name)
+        {
+            if (name.Equals("done"))
+            {
+                btnInsertGara.Enabled = true;
+                btnDelGara.Enabled = true;
+                btnEditGara.Enabled = true;
+                btnSaveGara.Enabled = false;
+                btnExitGara.Enabled = false;
+            }
+
+        }
+
+        /// <summary>
         /// pls, select show hangXe
         /// </summary>
         public void LoadCmbGara()
         {
-
-            string query = "SELECT HangXe FROM dbo.THONGTINXE";
+            string query = "SELECT DISTINCT HangXe FROM dbo.THONGTINXE";
             SqlConnect connect = new SqlConnect();
             cmbShowGara.DataSource = connect.ExecuteQuery(query);
             cmbShowGara.DisplayMember = "HangXe";
@@ -132,15 +174,13 @@ namespace QuanLiGaraOto
 
             if (bsx == "")
             {
-                query = "select * from THONGTINXE where HangXe= '" + hangXe + "'";
+                query = "select * from THONGTINXE where HangXe = '" + hangXe + "'";
                 dgvGara.DataSource = connect.ExecuteQuery(query);
-
             }
             else
             {
                 query = "select * from THONGTINXE where HangXe = '" + hangXe + "' and BienSoXe like '" + bsx + "%'";
                 dgvGara.DataSource = connect.ExecuteQuery(query);
-
             }
 
         }
@@ -327,69 +367,104 @@ namespace QuanLiGaraOto
         /// <param name="e"></param>
         private void btnReloadGara_Click(object sender, EventArgs e)
         {
+            txtSearchGara.Text = "";
             LoadXe();
             cmbShowGara.Enabled = false;
         }
-        /// <summary>
-        /// update info gara
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
+        // update info gara
         private void btnEditGara_Click(object sender, EventArgs e)
         {
+            check = true;
             unlockTxtGara();
-            string sqlEDIT = "UPDATE THONGTINXE set  HangXe = '" + txtHangXe.Text + "', DoiXe = '" + txtDX.Text + "' , SoKhung = '" + txtSoKhung.Text
-                            + "', SoMay = '" + txtSoMay.Text + "', SoKM = '" + txtSoKM.Text + "' where BienSoXe = '" + txtBS.Text + "'";
+            txtHangXe.Enabled = false;
+            txtBS.Enabled = false;
+            showEnableBtn("update");
 
-            SqlConnect connect = new SqlConnect();
-            connect.OpenConnect();
-            SqlCommand cmd = new SqlCommand(sqlEDIT, connect.Conn);
-            cmd.ExecuteNonQuery();
-            LoadXe();
-            connect.CloseConnect();
-            lockTxtGara();
+            //string sqlEDIT = "UPDATE THONGTINXE set  HangXe = '" + txtHangXe.Text + "', DoiXe = '" + txtDX.Text + "' , SoKhung = '" + txtSoKhung.Text
+            //                + "', SoMay = '" + txtSoMay.Text + "', SoKM = '" + txtSoKM.Text + "' where BienSoXe = '" + txtBS.Text + "'";
+
+            //SqlConnect connect = new SqlConnect();
+            //connect.OpenConnect();
+            //SqlCommand cmd = new SqlCommand(sqlEDIT, connect.Conn);
+            //cmd.ExecuteNonQuery();
+            //LoadXe();
+            //connect.CloseConnect();
+            //lockTxtGara();
         }
-        /// <summary>
-        /// delete gara
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
+        //delete gara
         private void btnDelGara_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn muốn xóa xe mang biển số " + txtBS.Text, "Quession", MessageBoxButtons.YesNo) != DialogResult.No)
+
+            if (CheckDel())
             {
-                string sqlDel = "delete from ThongTinXe where BienSoXe = '" + txtBS.Text + "'";
-                SqlConnect connect = new SqlConnect();
-                connect.OpenConnect();
-                SqlCommand cmd = new SqlCommand(sqlDel, connect.Conn);
-                cmd.ExecuteNonQuery();
-                LoadXe();
-                connect.CloseConnect();
-                resetTxtGara();
+                if (MessageBox.Show("Bạn muốn xóa xe mang biển số " + txtBS.Text, "Quession", MessageBoxButtons.YesNo) != DialogResult.No)
+                {
+                    string sqlDel = "delete from ThongTinXe where BienSoXe = '" + txtBS.Text + "'";
+                    SqlConnect connect = new SqlConnect();
+                    connect.OpenConnect();
+                    SqlCommand cmd = new SqlCommand(sqlDel, connect.Conn);
+                    cmd.ExecuteNonQuery();
+                    LoadXe();
+                    connect.CloseConnect();
+                    resetTxtGara();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bạn cần chọn xe muốn xóa trước!");
             }
 
         }
-        /// <summary>
-        /// insert to gara
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
+        //insert to gara
         private void btnInsertGara_Click(object sender, EventArgs e)
         {
-            resetTxtGara();
+            check = false;
             unlockTxtGara();
-            try
+            resetTxtGara();
+            showEnableBtn("insert");
+            //try
+            //{
+
+            //    string sqlINSERT = "INSERT INTO dbo.THONGTINXE( BienSoXe , HangXe ,DoiXe ,SoKhung , SoMay , SoKM) VALUES  ( '"
+            //                    + txtBS.Text + "' ,N'" + txtHangXe.Text + "' ,N'" + txtDX.Text + "' ,N'" + txtSoKhung.Text + "' , N'"
+            //                    + txtSoMay.Text + "' , N'" + txtSoKM.Text + "'  )";
+
+            //    SqlConnect connect = new SqlConnect();
+            //    connect.OpenConnect();
+            //    SqlCommand cmd = new SqlCommand(sqlINSERT, connect.Conn);
+            //    cmd.ExecuteNonQuery();
+            //    LoadXe();
+            //    connect.CloseConnect();
+            //    lockTxtGara();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Error");
+            //}
+
+        }
+
+        //Exit to gara
+        private void btnExitGara_Click(object sender, EventArgs e)
+        {
+            lockTxtGara();
+            resetTxtGara();
+            resetEnableBtn("done");
+        }
+
+        //Save to gara
+        private void btnSaveGara_Click(object sender, EventArgs e)
+        {
+            if (check = false)
             {
-                if (txtBS.Text == "" || txtHangXe.Text == "" || txtDX.Text == "" || txtSoKhung.Text == "" || txtSoMay.Text == "" || txtSoKM.Text == "")
+                if (CheckIn_Up())
                 {
-                    MessageBox.Show("Bạn cần điền đầy đủ thông tin!", "Confirm");
-                }
-                else
-                {
-                    
                     string sqlINSERT = "INSERT INTO dbo.THONGTINXE( BienSoXe , HangXe ,DoiXe ,SoKhung , SoMay , SoKM) VALUES  ( '"
-                                    + txtBS.Text + "' ,N'" + txtHangXe.Text + "' ,N'" + txtDX.Text + "' ,N'" + txtSoKhung.Text + "' , N'"
-                                    + txtSoMay.Text + "' , N'" + txtSoKM.Text + "'  )";
+                                + txtBS.Text + "' ,N'" + txtHangXe.Text + "' ,N'" + txtDX.Text + "' ,N'" + txtSoKhung.Text + "' , N'"
+                                + txtSoMay.Text + "' , N'" + txtSoKM.Text + "'  )";
 
                     SqlConnect connect = new SqlConnect();
                     connect.OpenConnect();
@@ -399,13 +474,38 @@ namespace QuanLiGaraOto
                     connect.CloseConnect();
                     lockTxtGara();
                 }
+                else
+                {
+                    MessageBox.Show("Bạn phải điền đầy đủ thông tin!");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Error");
-            }
+                if (CheckIn_Up())
+                {
+                    string sqlEDIT = "UPDATE THONGTINXE set DoiXe = '" + txtDX.Text + "' , SoKhung = '" + txtSoKhung.Text
+                                + "', SoMay = '" + txtSoMay.Text + "', SoKM = '" + txtSoKM.Text + "' where HangXe = '" + txtHangXe.Text + "' AND BienSoXe = '" + txtBS.Text + "'";
 
+                    SqlConnect connect = new SqlConnect();
+                    connect.OpenConnect();
+                    SqlCommand cmd = new SqlCommand(sqlEDIT, connect.Conn);
+                    cmd.ExecuteNonQuery();
+                    LoadXe();
+                    connect.CloseConnect();
+                    lockTxtGara();
+                }
+                else
+                {
+                    MessageBox.Show("Bạn cần chọn xe cần sửa!");
+                    resetEnableBtn("done");
+                    lockTxtGara();
+                }
+            }
+            resetTxtGara();
+            resetEnableBtn("done");
         }
+
+
         /// <summary>
         /// bingding dataGridview to textbox is tbGara
         /// </summary>
@@ -432,7 +532,30 @@ namespace QuanLiGaraOto
             searchGara(txtSearchGara.Text, cmbShowGara.Text);
         }
 
+        private void cmbShowGara_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            searchGara(txtSearchGara.Text, cmbShowGara.Text);
+        }
+
+
         #endregion
+
+        private void frmQLGara_Load(object sender, EventArgs e)
+        {
+            LoadXe();
+            LoadCmbNhanVien();
+            AddXuong();
+            LoadNhanvien();
+            LoadPhutung();
+            lockTxtGara();
+            LoadCmbGara();
+
+            cmbShowGara.Enabled = false;
+            //this.cmbShowGara.DropDownStyle = ComboBoxStyle.DropDownList;
+            btnExitGara.Enabled = false;
+            btnSaveGara.Enabled = false;
+
+        }
 
 
     }

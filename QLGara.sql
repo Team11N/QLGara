@@ -536,19 +536,14 @@ end
 go
 DELETE FROM PHIEUDANHGIA
 WHERE MaPhieuDanhGia='1'
-
+GO 
 select TenXuong from Xuong
-delete
-
-
---
-
 Go
 CREATE PROC USP_GetListHoaDonByDate
 @checkIn date,@checkOut date
 AS
 BEGIN
-	SELECT TenHoaDon as [Hóa Đơn],XUONG.TenXuong as [Xưởng],DateCheckIn as [Ngày vào],DateCheckOut as [Ngày ra],HOADON.MaNguoiPhuTrach as [Mã người phụ trách],CongSua as [Công Sửa],TongTienThanhToan as [Tổng Tiền Thanh Toán]
+	SELECT TenHoaDon as [Hóa Đơn],XUONG.TenXuong as [Xưởng],DateCheckIn as [Ngày vào],DateCheckOut as [Ngày ra],HOADON.MaNguoiPhuTrach as [Mã người phụ trách],TongTienThanhToan as [Tổng Tiền Thanh Toán]
 	FROM  HOADON,XUONG
 	WHERE DateCheckIn >= @checkIn and DateCheckOut <= @checkOut
 END
@@ -556,5 +551,85 @@ END
 GO
 
 exec USP_GetListHoaDonByDate '20170101','20171001'
-exec USP_GetListHoaDonByDate '20171101','20171230',1
+exec USP_GetListHoaDonByDate '20171101','20171230'
+GO 
 select * from HOADON
+GO
+use QLGara
+go
+--thu tuc load du lieu len datagirdview
+create PROC LayDanhSachHoaDonTheoNgay
+@checkIn date,@checkOut date
+AS
+BEGIN
+	SELECT TenHoaDon as [Hóa Đơn],TenXuong as [Xưởng],DateCheckIn as [Ngày vào],DateCheckOut as [Ngày ra],TongTienThanhToan as [Tổng Tiền]
+	FROM  HOADON
+	WHERE DateCheckIn >= @checkIn and DateCheckOut <= @checkOut
+END
+GO
+GO
+
+CREATE PROC SpThem(@bensoxe varchar(50),@hangxe nvarchar(100),@doixe nvarchar(100),@sokhung nvarchar(100),@somay nvarchar(100),@sokm int)
+AS
+BEGIN
+	INSERT INTO dbo.THONGTINXE 
+	        ( BienSoXe ,
+	          HangXe ,
+	          DoiXe ,
+	          SoKhung ,
+	          SoMay ,
+	          SoKM
+	        )
+	VALUES  ( @bensoxe, -- BienSoXe - varchar(50)
+	          @hangxe , -- HangXe - nvarchar(50)
+	          @doixe , -- DoiXe - nvarchar(50)
+	          @sokhung , -- SoKhung - nvarchar(50)
+			@somay, -- SoMay - nvarchar(50)
+	          @sokm  -- SoKM - int
+	        )
+END
+
+INSERT INTO dbo.THONGTINXE( BienSoXe , HangXe ,DoiXe ,SoKhung , SoMay , SoKM)VALUES  ( '' ,N'' ,N'' ,N'' , N'' ,  0  )
+GO
+SELECT DISTINCT HangXe FROM dbo.THONGTINXE
+GO
+SELECT * FROM dbo.THONGTINXE
+GO 
+--thu tuc update bieu do
+create proc updatebieudo
+as
+begin
+	declare @month_pay int= 1;
+	declare @money int;
+	while @month_pay <= 12
+	begin
+	select @money=sum(Tongtienthanhtoan) from HOADON where MONTH(DateCheckOut)=@month_pay;
+	update tbBieuDo set doanhthu=@money where thang=@month_pay
+	set @month_pay=@month_pay+1;
+	end
+END
+GO 
+--thu tuc show bieu do
+create proc bieudo
+as
+begin
+	select thang as [Tháng],doanhthu as [Tổng Tiền] from tbBieuDo
+end
+GO 
+exec bieudo
+GO 
+--thu tuc xoa 1 hoa don tren datagirdview
+create proc XoaHoaDon
+@ten nvarchar(50)
+as
+begin
+	delete from HOADON where Ma in (select Ma from HOADON where TenHoaDon=@ten);
+END
+GO 
+--tao bang bieu do
+create table tbBieuDo
+(
+thang int primary key,
+doanhthu int
+)
+GO 

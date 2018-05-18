@@ -30,3 +30,4 @@ E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.Properties.Resources.res
 E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.csproj.GenerateResource.Cache
 E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.frmLogin.resources
 E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.frmQLGara.resources
+E:\Code VS\QlGara\QuanLiGaraOto\obj\Debug\QuanLiGaraOto.csproj.ResolveComReference.cache

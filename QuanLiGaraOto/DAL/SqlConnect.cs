@@ -1,83 +1,1 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QuanLiGaraOto.DAL
-{
-    public class SqlConnect
-    {
-        private string strConn = "Data Source=.\\sqlexpress;Initial Catalog=QLGara;Integrated Security=True";
-        SqlConnection conn = null;
-
-        public SqlConnection Conn
-        {
-            get
-            {
-                return conn;
-            }
-
-            set
-            {
-                conn = value;
-            }
-        }
-
-        public SqlConnect()
-        {
-            conn = new SqlConnection(strConn);
-        }
-
-        public void OpenConnect()
-        {
-            if (conn == null)
-            {
-                conn = new SqlConnection(strConn);
-            }
-            if (conn.State == ConnectionState.Closed)
-            {
-                conn.Open();
-            }
-        }
-
-        public void CloseConnect()
-        {
-            if (conn.State ==  ConnectionState.Open)
-            {
-                conn.Close();
-            }
-        }
-
-        public DataTable ExecuteQuery(string query)
-        {
-            SqlConnection conn = new  SqlConnection(strConn);
-            conn.Open();
-            SqlCommand command = new SqlCommand(query, conn);
-            DataTable data = new DataTable();
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            adapter.Fill(data);
-            conn.Close();
-            return data;
-        }
-
-        public SqlDataReader execCommand(string sql)
-        {
-            SqlDataReader dr = null;
-            try
-            {
-                this.OpenConnect();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.CommandType = CommandType.Text;
-                dr = cmd.ExecuteReader();
-            }
-            catch (Exception ex)
-            {
-                new Exception("Error:" + ex.Message);
-            }
-            return dr;
-        }
-    }
-}
+﻿using System; using System.Collections.Generic; using System.Data; using System.Data.SqlClient; using System.Linq; using System.Text; using System.Threading.Tasks;  namespace QuanLiGaraOto.DAL {     public class SqlConnect     {         private string strConn = "Data Source=.\\sqlexpress;Initial Catalog=QLGara;Integrated Security=True";         SqlConnection conn = null;          public SqlConnection Conn         {             get             {                 return conn;             }              set             {                 conn = value;             }         }          public SqlConnect()         {             conn = new SqlConnection(strConn);         }          public void OpenConnect()         {             if (conn == null)             {                 conn = new SqlConnection(strConn);             }             if (conn.State == ConnectionState.Closed)             {                 conn.Open();             }         }          public void CloseConnect()         {             if (conn.State ==  ConnectionState.Open)             {                 conn.Close();             }         }          public DataTable ExecuteQuery(string query)         {             SqlConnection conn = new  SqlConnection(strConn);             conn.Open();             SqlCommand command = new SqlCommand(query, conn);             DataTable data = new DataTable();             SqlDataAdapter adapter = new SqlDataAdapter(command);             adapter.Fill(data);             conn.Close();             return data;         }          public SqlDataReader execCommand(string sql)         {             SqlDataReader dr = null;             try             {                 this.OpenConnect();                 SqlCommand cmd = new SqlCommand(sql, conn);                 cmd.CommandType = CommandType.Text;                 dr = cmd.ExecuteReader();             }             catch (Exception ex)             {                 new Exception("Error:" + ex.Message);             }             return dr;         }          public DataTable ThucThiQuery(string query, object[] parameter = null)         {             DataTable data = new DataTable();             using (SqlConnection cnn = new SqlConnection(strConn))             {                 cnn.Open();                 SqlCommand cmd = new SqlCommand(query, cnn);                 if (parameter != null)                 {                     string[] listPara = query.Split(' ');                     int i = 0;                     foreach (string item in listPara)                     {                         if (item.Contains('@'))                         {                             cmd.Parameters.AddWithValue(item, parameter[i]);                             i++;                         }                     }                 }                  SqlDataAdapter adapter = new SqlDataAdapter(cmd);                 adapter.Fill(data);                 cnn.Close();             }             return data;         }         public int ThucThiNonQuery(string query, object[] parameter = null)         {             int data = 0;             using (SqlConnection cnn = new SqlConnection(strConn))             {                 cnn.Open();                 SqlCommand cmd = new SqlCommand(query, cnn);                 if (parameter != null)                 {                     string[] listPara = query.Split(' ');                     int i = 0;                     foreach (string item in listPara)                     {                         if (item.Contains('@'))                         {                             cmd.Parameters.AddWithValue(item, parameter[i]);                             i++;                         }                     }                 }                  data = cmd.ExecuteNonQuery();                 cnn.Close();             }              return data;         }     } } 
